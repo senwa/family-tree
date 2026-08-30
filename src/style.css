@@ -1,0 +1,137 @@
+/* 家谱网站 - 中国风全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-primary: #8b0000;
+  --color-primary-light: #a02020;
+  --color-gold: #d4a853;
+  --color-gold-dark: #b8860b;
+  --color-bg: #faf8f3;
+  --color-bg-warm: #fef5e7;
+  --color-text: #333;
+  --color-text-light: #666;
+  --color-text-muted: #999;
+  --color-border: #e8dcc8;
+  --color-border-light: #d4c5a0;
+  --color-female: #c4716e;
+  /* 性别 / 生卒 配色 */
+  --color-male: #3b6ea5;
+  --color-male-bg: #eaf1f8;
+  --color-female-bg: #f9eded;
+  --color-deceased: #9c958a;
+  --color-deceased-bg: #efebe5;
+  --font-sans: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-dark);
+}
+
+/* 选中文字颜色 */
+::selection {
+  background: rgba(139, 0, 0, 0.15);
+  color: var(--color-primary);
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* ===== 打印样式：仅输出家谱树 ===== */
+@media print {
+  html, body {
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* 隐藏所有工具栏、搜索栏、提示与弹窗遮罩 */
+  .toolbar,
+  .search-bar,
+  .help-hint,
+  .detail-overlay,
+  .import-overlay,
+  .edit-overlay,
+  .stats-overlay {
+    display: none !important;
+  }
+
+  .app {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .family-tree-container {
+    position: static !important;
+    overflow: visible !important;
+    background: #fff !important;
+    flex: none !important;
+  }
+
+  .tree-viewport {
+    overflow: visible !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  /* 抹掉缩放/平移，按原始尺寸铺开整棵树 */
+  .tree-canvas {
+    position: static !important;
+    transform: none !important;
+    top: 0 !important;
+    left: 0 !important;
+    padding: 0 !important;
+  }
+
+  .node-card {
+    box-shadow: none !important;
+  }
+}
+
