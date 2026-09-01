@@ -433,19 +433,21 @@ watch(
   left: 0;
 }
 
-/* 第一个子节点：横线只覆盖右半部分 */
-.branch-first .hline {
+/* 第一个子节点：横线只覆盖右半部分。
+   注意必须用直接子代选择器 > ：TreeNode 递归渲染时所有层级共用同一个 scope，
+   后代选择器会让"长子分支"内的所有后代 hline 误命中本规则（曾导致末子横线镜像） */
+.branch-first > .hline {
   left: 50%;
   width: 50%;
 }
 
 /* 最后一个子节点：横线只覆盖左半部分 */
-.branch-last .hline {
+.branch-last > .hline {
   width: 50%;
 }
 
 /* 唯一子节点：不需要横线 */
-.branch-only .hline {
+.branch-only > .hline {
   display: none;
 }
 </style>
