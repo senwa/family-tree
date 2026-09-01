@@ -1,4 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue'
+import { measureContentExtent } from '../utils/measure.js'
 
 export function useZoomDrag(containerRef) {
   const scale = ref(1)
@@ -33,6 +34,27 @@ export function useZoomDrag(containerRef) {
     scale.value = 1
     translateX.value = 0
     translateY.value = 0
+  }
+
+  // 自适应视图：缩放到完整容纳全部成员并居中显示。
+  // 画布 CSS 定位于 left:50% / top:40px、变换原点 0 0，
+  // 令内容边界（未缩放坐标 extent.left/top）映射后居中于容器即得平移量
+  function fitView(contentEl) {
+    const container = containerRef.value
+    if (!container || !contentEl) { resetView(); return }
+    const extent = measureContentExtent(contentEl)
+    const cw = container.clientWidth
+    const ch = container.clientHeight
+    if (extent.width <= 0 || extent.height <= 0 || cw <= 0 || ch <= 0) {
+      resetView()
+      return
+    }
+    const margin = 40 // 四周留白
+    const fit = Math.min((cw - margin) / extent.width, (ch - margin) / extent.height, 1)
+    scale.value = Math.max(MIN_SCALE, Math.round(fit * 100) / 100)
+    const s = scale.value
+    translateX.value = Math.round((cw - extent.width * s) / 2 - cw / 2 - extent.left * s)
+    translateY.value = Math.round((ch - extent.height * s) / 2 - 40 - extent.top * s)
   }
 
   // 计算变换样式
@@ -164,6 +186,7 @@ export function useZoomDrag(containerRef) {
     zoomIn,
     zoomOut,
     resetView,
+    fitView,
     getTransformStyle,
     bindEvents,
     unbindEvents

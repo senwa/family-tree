@@ -222,10 +222,13 @@ function handleSavePerson({ mode, id, data }) {
 // ===== 导出图片 / 打印 =====
 async function handleExportImage() {
   if (!familyData.value) return
-  // 重置视图，确保捕获到完整的树而非当前缩放视图
+  // 先自适应全览，确保全部成员完整落在可视区内
   handleResetView()
   await nextTick()
-  const el = treeRef.value?.getCanvasElement?.()
+  // 等待画布 transform 过渡（0.05s）结束再捕获，避免取到中间态位移
+  await new Promise(resolve => setTimeout(resolve, 80))
+  // 所见即所得：捕获可视区域而非画布本身
+  const el = treeRef.value?.getViewportElement?.()
   if (!el) return
   try {
     await exportTreeImage(el)
